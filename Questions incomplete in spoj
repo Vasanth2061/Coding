@@ -1,0 +1,66 @@
+1.HORRIBLE - Horrible Queries
+2.Bishops-getting wrong answer for the below code
+
+#include <iomanip>
+#include <vector>
+#include <string>
+#include <algorithm>
+#include <unordered_map>
+using namespace std;
+string sub(string s){
+	int borrow=1;
+	int i=s.size()-1;
+	while(i>=0 and borrow==1){
+		int digit=(s[i]-'0')-borrow;
+		if(digit<0){
+			digit+=10;
+			borrow=1;
+		}
+		else
+			borrow=0;
+		s[i]=(digit)+'0';
+		i--;
+	}
+	while(s[0]=='0')
+		s.erase(0,1);
+		
+	return s;
+}
+string mul(string s){
+	int rem=0;
+	int i=s.size()-1;
+	int digit;
+	while(i>=0){
+		digit=(s[i]-'0')*2+rem;
+		if(digit>9){
+			rem=digit%10;
+			digit/=10;
+		}
+		else
+			rem=0;
+		s[i]=(digit)+'0';
+		i--;
+	}
+	if(rem!=0)
+		s=to_string(rem)+s;
+	return s;
+}
+int main() {
+	string s;
+	while(	cin>>s){
+//		string s;
+//		cin>>s;
+		if(s=="1")
+			cout<<"1"<<endl;
+		else{
+			string ans;
+			ans=sub(s);
+			ans=mul(ans);
+			cout<<ans<<endl;
+		}
+	}
+	return 0;
+}
+
+3.GSS1 - Can you answer these queries I
+4.PALIN - The Next Palindrome
