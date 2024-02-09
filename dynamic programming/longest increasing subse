@@ -1,0 +1,52 @@
+Given an integer array nums, return the length of the longest strictly increasing 
+subsequence
+.
+
+ 
+
+Example 1:
+
+Input: nums = [10,9,2,5,3,7,101,18]
+Output: 4
+Explanation: The longest increasing subsequence is [2,3,7,101], therefore the length is 4.
+Example 2:
+
+Input: nums = [0,1,0,3,2,3]
+Output: 4
+Example 3:
+
+Input: nums = [7,7,7,7,7,7,7]
+Output: 1
+ 
+
+Constraints:
+
+1 <= nums.length <= 2500
+-104 <= nums[i] <= 104
+
+class Solution {
+public:
+    int solve(int index, int prev_index, vector<int>& nums, vector<vector<int>>& dp) {
+        if (index == nums.size())
+            return 0;
+        if (dp[index][prev_index + 1] != -1)
+            return dp[index][prev_index + 1];
+        
+        // Case 1: Exclude the current element
+        int len = solve(index + 1, prev_index, nums, dp);
+        
+        // Case 2: Include the current element if it's greater than the previous element
+        if (prev_index == -1 || nums[index] > nums[prev_index])
+            len = max(len, 1 + solve(index + 1, index, nums, dp));
+        
+        return dp[index][prev_index + 1] = len;
+    }
+
+    int lengthOfLIS(vector<int>& nums) {
+        int n = nums.size();
+        vector<vector<int>> dp(n, vector<int>(n + 1, -1)); // Initialize dp with -1
+        
+        return solve(0, -1, nums, dp);
+    }
+};
+ 
