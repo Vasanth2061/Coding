@@ -1,95 +1,65 @@
-You are given an array 'arr' of length 'n'.
+Problem statement
+You are given a string 'str' of lowercase alphabets and an integer 'k' .
 
 
 
-Find the Longest Increasing Subsequence of the array.
+Your task is to return the count all the possible substrings that have exactly 'k' distinct characters.
 
 
 
-A subsequence is a subset of an array achieved by removing some (possibly 0) elements without changing the order of the remaining elements.
+For example:
 
-
-
-Increasing subsequence means a subsequence in which all the elements are strictly increasing.
-
-
-
-Longest increasing subsequence is an increasing subsequence that has the largest length possible.
-
-
-
-Please note that there may be more than one LIS (Longest Increasing Subsequence) possible. Return any one of the valid sequences.
-
-
-
-Example:
 
 Explain
-Input: ‘arr’ = [5, 6, 3, 4, 7, 6]
+'str' = abcad and 'k' = 2. 
 
-Output: LIS = [5, 6, 7] OR [3, 4, 7] OR [3, 4, 6]
+We can see that the substrings {ab, bc, ca, ad} are the only substrings with 2 distinct characters. 
 
-Explanation: All these three subsequences are valid Longest Increasing Subsequences. Returning any of them is correct.
+Therefore, the answer will be 4.    
 Detailed explanation ( Input/output format, Notes, Images )
-Sample Input 1:
-6
-5 6 3 4 7 6
-
-
-Sample Output 1:
+Sample Input 1 :
+aacfssa    
 3
+Sample Output 1 :
+5    
+Explanation of The Sample Input 1:
+Given 'str' = “aacfssa”. We can see that the substrings with only 3 distinct characters are {aacf, acf, cfs, cfss, fssa}. 
 
-
-Explanation Of Sample Input 1 :
-There are three valid LIS for the given array: [5, 6, 7], [3, 4, 7] OR [3, 4, 6], and their length is 3.
-
-
+Therefore, the answer will be 5.
 Sample Input 2 :
-5
-1 2 3 4 5
-
-
+qffds
+4
 Sample Output 2 :
-5
-
-
-Explanation Of Sample Input 2 :
-There is only one valid LIS for the array: [1, 2, 3, 4, 5], and its length is 5.
-
-
-Expected time complexity:
-The expected time complexity is O(‘n’ ^ 2).
-
-
+1
 Constraints:
-1 <= ‘n’ <= 500
-1 <= ‘arr[i]’ <= 10^5
+1 <= |str| <= 10^5
+1 <= k <= 26
 
-vector<int> printingLongestIncreasingSubsequence(vector<int> arr, int n) {
-	// Write your code here
-	vector<int> dp(n,1);
-	vector<int> hash(n);
-	int maxi=1,last=0;
-	for(int i=0;i<n;i++){
-		hash[i]=i;
-		for(int j=0;j<i;j++){
-			if(arr[j]<arr[i]){
-				if(dp[i]<dp[j]){
-					dp[i]=dp[j]+1;
-					hash[i]=j;
-				}
-			}
-		}
-		if(dp[i]>maxi){
-			maxi=dp[i];
-			last=i;
-		}
-	}
-	vector<int> ans;
-	ans.push_back(arr[last]);
-	while(hash[last]!=last){
-		last=hash[last];
-		ans.push_back(arr[last]);
-	}
-	return ans;
+Time Limit: 1 second
+
+int solve(string s,int k){
+    int l=0,r=0;
+    int count=0,distinct=0;
+    int n=s.size();
+    unordered_map<char,int> mp;
+    while(r<n){
+        if(mp[s[r]]==0)
+            distinct++;
+        mp[s[r]]++;
+        while(distinct>k){
+            mp[s[l]]--;
+            if(mp[s[l]]==0)
+                distinct--;
+            l++;
+        }
+        count+=r-l+1;
+        r++;
+    }
+    return count;
 }
+int countSubStrings(string str, int k) 
+{
+    return solve(str,k)-solve(str,k-1);
+}
+
+
