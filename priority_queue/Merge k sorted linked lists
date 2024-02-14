@@ -1,0 +1,71 @@
+You are given an array of k linked-lists lists, each linked-list is sorted in ascending order.
+
+Merge all the linked-lists into one sorted linked-list and return it.
+
+ 
+
+Example 1:
+
+Input: lists = [[1,4,5],[1,3,4],[2,6]]
+Output: [1,1,2,3,4,4,5,6]
+Explanation: The linked-lists are:
+[
+  1->4->5,
+  1->3->4,
+  2->6
+]
+merging them into one sorted list:
+1->1->2->3->4->4->5->6
+Example 2:
+
+Input: lists = []
+Output: []
+Example 3:
+
+Input: lists = [[]]
+Output: []
+ 
+
+Constraints:
+
+k == lists.length
+0 <= k <= 104
+0 <= lists[i].length <= 500
+-104 <= lists[i][j] <= 104
+lists[i] is sorted in ascending order.
+The sum of lists[i].length will not exceed 104.
+
+class Solution {
+public:
+    ListNode* mergeKLists(vector<ListNode*>& lists) {
+       priority_queue<pair<int,ListNode*>,vector<pair<int,ListNode*>>,greater<pair<int,ListNode*>>> pq;
+       int n=lists.size();
+       for(int i=0;i<n;i++){
+           if(lists[i]!=NULL)
+                pq.push({lists[i]->val,lists[i]});
+       }
+       ListNode* head=NULL;
+       ListNode* prev=NULL;
+       int i=0;
+       while(!pq.empty()){
+           auto x=pq.top();
+           pq.pop();
+            int value=x.first;
+            ListNode* node=x.second;
+            if(i==0){
+                head=new ListNode(value);
+                if(node->next!=NULL)
+                    pq.push({node->next->val,node->next});
+                prev=head;
+                i++;
+            }
+            else {
+                prev->next=new ListNode(value);
+                if(node->next!=NULL)
+                    pq.push({node->next->val,node->next});   
+                prev=prev->next;
+            }
+       }
+       return head;
+    }
+};
